@@ -453,11 +453,12 @@ int32_t getDistance(int object_number)
             Status = WaitMeasurementDataReady(pMyDevice[object_number]);
 
             if(Status == VL53L0X_ERROR_NONE)
-            {
+             {
                 Status = VL53L0X_GetRangingMeasurementData(pMyDevice[object_number],
                                     pRangingMeasurementData);
                 if(Status == VL53L0X_ERROR_NONE)
                 {
+                    //current_distance = pRangingMeasurementData->MeasurementTimeUsec;
                     current_distance = pRangingMeasurementData->RangeMilliMeter;
                 }
 

@@ -78,6 +78,15 @@ write_func = WRITEFUNC(i2c_write)
 # pass i2c read and write function pointers to VL53L0X library
 tof_lib.VL53L0X_set_i2c(read_func, write_func)
 
+class object_t(Structure):
+    _fields_ = [
+        ('a', c_uint8),
+        ('b', c_uint8),
+        ('c', c_uint32),
+        ('d', POINTER(c_uint8)),
+    ]
+
+
 class VL53L0X(object):
     """VL53L0X ToF."""
 
@@ -113,5 +122,16 @@ class VL53L0X(object):
         Status =  tof_lib.VL53L0X_GetMeasurementTimingBudgetMicroSeconds(Dev, budget_p)
         if (Status == 0):
             return (budget.value + 1000)
+        else:
+            return 0
+     
+    def perf_single_m(self):
+        Dev = POINTER(c_void_p)
+        Dev = tof_lib.getDev(self.my_object_number)
+        result = c_uint(0)
+        result_p = pointer(result)
+        Status = tof_lib.VL53L0X_PerformSingleRangingMeasurement(Dev,result_p)
+        if (Status == 0):
+            return (result.value)
         else:
             return 0
